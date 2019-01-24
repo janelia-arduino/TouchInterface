@@ -14,14 +14,16 @@
 #include <ConstantVariable.h>
 #include <Functor.h>
 
+#include <MPR121.h>
+
 #include <ModularServer.h>
 #include <ModularDeviceBase.h>
-#include <I2CInterface.h>
+#include <WireInterface.h>
 
 #include "TouchInterface/Constants.h"
 
 
-class TouchInterface : public I2CInterface
+class TouchInterface : public WireInterface
 {
 public:
   TouchInterface();
@@ -32,6 +34,10 @@ private:
   modular_server::Parameter parameters_[touch_interface::constants::PARAMETER_COUNT_MAX];
   modular_server::Function functions_[touch_interface::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[touch_interface::constants::CALLBACK_COUNT_MAX];
+
+  MPR121 mpr121_;
+
+  void setupMPR121();
 
   // Handlers
 

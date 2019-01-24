@@ -8,7 +8,7 @@
 #ifndef TOUCH_INTERFACE_CONSTANTS_H
 #define TOUCH_INTERFACE_CONSTANTS_H
 #include <ConstantVariable.h>
-#include <I2CInterface.h>
+#include <WireInterface.h>
 
 
 namespace touch_interface

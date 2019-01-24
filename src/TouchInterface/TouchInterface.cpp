@@ -17,7 +17,7 @@ TouchInterface::TouchInterface()
 void TouchInterface::setup()
 {
   // Parent Setup
-  I2CInterface::setup();
+  WireInterface::setup();
 
   // Reset Watchdog
   resetWatchdog();
@@ -45,6 +45,11 @@ void TouchInterface::setup()
   // Functions
 
   // Callbacks
+}
+
+void TouchInterface::setupMPR121()
+{
+  mpr121_.setWire();
 }
 
 // Handlers must be non-blocking (avoid 'delay')

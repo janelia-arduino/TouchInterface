@@ -29,7 +29,7 @@
 
   [[https://github.com/janelia-arduino/ModularDeviceBase]]
 
-  [[https://github.com/janelia-arduino/I2CInterface]]
+  [[https://github.com/janelia-arduino/WireInterface]]
 
 * Clients
 
