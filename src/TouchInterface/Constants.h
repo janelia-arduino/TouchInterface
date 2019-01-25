@@ -9,6 +9,7 @@
 #define TOUCH_INTERFACE_CONSTANTS_H
 #include <ConstantVariable.h>
 #include <WireInterface.h>
+#include <MPR121.h>
 
 
 namespace touch_interface

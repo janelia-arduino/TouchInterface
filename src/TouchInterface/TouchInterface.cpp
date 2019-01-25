@@ -49,7 +49,7 @@ void TouchInterface::setup()
 
 void TouchInterface::setupMPR121()
 {
-  mpr121_.setWire();
+  // mpr121_.setWire();
 }
 
 // Handlers must be non-blocking (avoid 'delay')

@@ -14,6 +14,10 @@ namespace touch_interface
 {
 namespace constants
 {
+const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX] =
+{
+};
+
 // Pins
 
 // Units

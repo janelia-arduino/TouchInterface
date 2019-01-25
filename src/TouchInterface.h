@@ -35,7 +35,7 @@ private:
   modular_server::Function functions_[touch_interface::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[touch_interface::constants::CALLBACK_COUNT_MAX];
 
-  MPR121 mpr121_;
+  MPR121 mpr121_array_[wire_interface::constants::WIRE_COUNT_MAX];
 
   void setupMPR121();
 

@@ -16,6 +16,10 @@ namespace touch_interface
 {
 namespace constants
 {
+enum {MPR121_COUNT_MAX=wire_interface::constants::WIRE_COUNT_MAX*MPR121::DEVICE_COUNT_MAX};
+
+extern const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX];
+
 // Pins
 
 // Units
