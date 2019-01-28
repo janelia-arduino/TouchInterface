@@ -29,17 +29,24 @@ public:
   TouchInterface();
   virtual void setup();
 
+protected:
+  // Handlers
+  virtual void setWireCountHandler();
+  virtual void setDeviceCountHandler(size_t wire_index);
+  virtual void pollingHandler(int wire_index);
+
 private:
   modular_server::Property properties_[touch_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[touch_interface::constants::PARAMETER_COUNT_MAX];
   modular_server::Function functions_[touch_interface::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[touch_interface::constants::CALLBACK_COUNT_MAX];
 
-  MPR121 mpr121_array_[wire_interface::constants::WIRE_COUNT_MAX];
+  MPR121 touch_devices_array_[wire_interface::constants::WIRE_COUNT_MAX];
 
-  void setupMPR121();
+  void setupTouchDevices();
 
   // Handlers
+  void setPhysicalChannelCountHandler(size_t touch_device_index);
 
 };
 

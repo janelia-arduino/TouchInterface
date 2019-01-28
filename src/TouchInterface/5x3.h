@@ -16,9 +16,9 @@ namespace touch_interface
 {
 namespace constants
 {
-enum {MPR121_COUNT_MAX=wire_interface::constants::WIRE_COUNT_MAX*MPR121::DEVICE_COUNT_MAX};
+enum {TOUCH_DEVICE_COUNT_MAX=wire_interface::constants::WIRE_COUNT_MAX * MPR121::DEVICE_COUNT_MAX};
 
-extern const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX];
+extern const MPR121::DeviceAddress touch_device_addresses[TOUCH_DEVICE_COUNT_MAX];
 
 // Pins
 
@@ -26,6 +26,7 @@ extern const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX];
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern const long physical_channel_count_default[TOUCH_DEVICE_COUNT_MAX];
 
 // Parameters
 

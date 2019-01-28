@@ -27,12 +27,18 @@ extern ConstantString device_name;
 extern ConstantString firmware_name;
 extern const modular_server::FirmwareInfo firmware_info;
 
+extern const bool fast_mode;
+
 // Pins
 
 // Units
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern ConstantString physical_channel_count_property_name;
+extern const long physical_channel_count_min;
+extern const long physical_channel_count_max;
+extern const long physical_channel_count_element_default;
 
 // Parameters
 

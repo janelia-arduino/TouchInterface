@@ -39,17 +39,34 @@ void TouchInterface::setup()
     callbacks_);
 
   // Properties
+  modular_server::Property & physical_channel_count_property = modular_server_.createProperty(constants::physical_channel_count_property_name,constants::physical_channel_count_default);
+  physical_channel_count_property.setRange(constants::physical_channel_count_min,constants::physical_channel_count_max);
+  physical_channel_count_property.setArrayLengthRange(constants::TOUCH_DEVICE_COUNT_MAX,constants::TOUCH_DEVICE_COUNT_MAX);
+  physical_channel_count_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<size_t> *)0,*this,&TouchInterface::setPhysicalChannelCountHandler));
 
   // Parameters
 
   // Functions
 
   // Callbacks
+
+  setupTouchDevices();
 }
 
-void TouchInterface::setupMPR121()
+void TouchInterface::setupTouchDevices()
 {
-  // mpr121_.setWire();
+  for (size_t wire_index=0; wire_index<getWireCount(); ++wire_index)
+  {
+    MPR121 & touch_devices = touch_devices_array_[wire_index];
+    touch_devices.setWire(*(wire_interface::constants::wire_ptrs[wire_index]),
+      constants::fast_mode);
+    for (size_t device_index=0; device_index<getDeviceCount(wire_index); ++device_index)
+    {
+      size_t touch_devices_index = (wire_index * MPR121::DEVICE_COUNT_MAX) + device_index;
+      touch_devices.addDevice(constants::touch_device_addresses[touch_devices_index]);
+    }
+    touch_devices.setupAllDevices();
+  }
 }
 
 // Handlers must be non-blocking (avoid 'delay')
@@ -69,3 +86,23 @@ void TouchInterface::setupMPR121()
 // modular_server_.property(property_name).setValue(value) value type must match the property default type
 // modular_server_.property(property_name).getElementValue(element_index,value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(element_index,value) value type must match the property array element default type
+
+void TouchInterface::setWireCountHandler()
+{
+  WireInterface::setWireCountHandler();
+  setupTouchDevices();
+}
+
+void TouchInterface::setDeviceCountHandler(size_t wire_index)
+{
+  WireInterface::setDeviceCountHandler(wire_index);
+  setupTouchDevices();
+}
+
+void TouchInterface::pollingHandler(int wire_index)
+{
+}
+
+void TouchInterface::setPhysicalChannelCountHandler(size_t touch_device_index)
+{
+}

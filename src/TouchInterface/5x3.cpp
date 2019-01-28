@@ -14,8 +14,16 @@ namespace touch_interface
 {
 namespace constants
 {
-const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX] =
+const MPR121::DeviceAddress touch_device_addresses[TOUCH_DEVICE_COUNT_MAX] =
 {
+  MPR121::ADDRESS_5A,
+  MPR121::ADDRESS_5B,
+  MPR121::ADDRESS_5C,
+  MPR121::ADDRESS_5D,
+  MPR121::ADDRESS_5A,
+  MPR121::ADDRESS_5B,
+  MPR121::ADDRESS_5C,
+  MPR121::ADDRESS_5D,
 };
 
 // Pins
@@ -23,6 +31,17 @@ const MPR121::DeviceAddress mpr121_addresses[MPR121_COUNT_MAX] =
 // Units
 
 // Properties
+const long physical_channel_count_default[TOUCH_DEVICE_COUNT_MAX] =
+{
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+  physical_channel_count_element_default,
+};
 
 // Parameters
 
