@@ -47,14 +47,133 @@ void TouchInterface::setup()
   // Parameters
 
   // Functions
+  modular_server::Function & reinitialize_function = modular_server_.createFunction(constants::reinitialize_function_name);
+  reinitialize_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&TouchInterface::reinitializeHandler));
+  reinitialize_function.setResultTypeBool();
+
+  modular_server::Function & communicating_function = modular_server_.createFunction(constants::communicating_function_name);
+  communicating_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&TouchInterface::communicatingHandler));
+  communicating_function.setResultTypeArray();
+  communicating_function.setResultTypeBool();
 
   // Callbacks
-
   setupTouchDevices();
+  updateProperties();
+  reinitialize();
+}
+
+bool TouchInterface::reinitialize()
+{
+  bool reinitialized = true;
+  size_t touch_device_index;
+  modular_server::Property & physical_channel_count_property = modular_server_.property(constants::physical_channel_count_property_name);
+  long physical_channel_count;
+  for (size_t wire_index=0; wire_index<getWireCount(); ++wire_index)
+  {
+    MPR121 & touch_devices = touch_devices_array_[wire_index];
+    for (size_t device_index=0; device_index<getDeviceCount(wire_index); ++device_index)
+    {
+      resetWatchdog();
+
+      MPR121::DeviceAddress device_address = getDeviceAddress(wire_index,device_index);
+      bool device_setup = touch_devices.setupDevice(device_address);
+      reinitialized = (reinitialized && device_setup);
+
+      touch_devices.setAllDeviceChannelsThresholds(device_address,
+        constants::touch_threshold,
+        constants::release_threshold);
+      touch_devices.setDebounce(device_address,
+        constants::touch_debounce,
+        constants::release_debounce);
+      touch_devices.setBaselineTracking(device_address,
+        constants::baseline_tracking);
+      touch_devices.setChargeDischargeCurrent(device_address,
+        constants::charge_discharge_current);
+      touch_devices.setChargeDischargeTime(device_address,
+        constants::charge_discharge_time);
+      touch_devices.setFirstFilterIterations(device_address,
+        constants::first_filter_iterations);
+      touch_devices.setSecondFilterIterations(device_address,
+        constants::second_filter_iterations);
+      touch_devices.setSamplePeriod(device_address,
+        constants::sample_period);
+      touch_device_index = getTouchDeviceIndex(wire_index,device_index);
+      physical_channel_count_property.getElementValue(touch_device_index,
+        physical_channel_count);
+      touch_devices.startChannels(device_address,
+        physical_channel_count,
+        constants::proximity_mode);
+    }
+  }
+  return reinitialized;
+}
+
+bool TouchInterface::communicating(size_t touch_device_index)
+{
+  if ((touch_device_index >= constants::TOUCH_DEVICE_COUNT_MAX) ||
+    (!touch_device_exists_[touch_device_index]))
+  {
+    return false;
+  }
+  MPR121 & touch_devices = getTouchDevices(touch_device_index);
+  return touch_devices.communicating(constants::touch_device_addresses[touch_device_index]);
+}
+
+size_t TouchInterface::getTouchDeviceCountLimit()
+{
+  size_t wire_count = getWireCount();
+  size_t last_wire_device_count = getDeviceCount(wire_count - 1);
+  size_t touch_device_count_limit = (wire_count - 1) * MPR121::DEVICE_COUNT_MAX;
+  touch_device_count_limit += last_wire_device_count;
+  return touch_device_count_limit;
+}
+
+void TouchInterface::getWireAndDeviceIndex(size_t touch_device_index,
+  size_t & wire_index,
+  size_t & device_index)
+{
+  wire_index = touch_device_index / MPR121::DEVICE_COUNT_MAX;
+  device_index = touch_device_index % MPR121::DEVICE_COUNT_MAX;
+}
+
+size_t TouchInterface::getTouchDeviceIndex(size_t wire_index,
+  size_t device_index)
+{
+  return (wire_index * MPR121::DEVICE_COUNT_MAX) + device_index;
+}
+
+MPR121::DeviceAddress TouchInterface::getDeviceAddress(size_t wire_index,
+  size_t device_index)
+{
+  size_t touch_device_index = getTouchDeviceIndex(wire_index,device_index);
+  return constants::touch_device_addresses[touch_device_index];
+}
+
+MPR121 & TouchInterface::getTouchDevices(size_t touch_device_index)
+{
+  if (touch_device_index >= constants::TOUCH_DEVICE_COUNT_MAX)
+  {
+    return dummy_touch_devices_;
+  }
+  size_t wire_index;
+  size_t device_index;
+  getWireAndDeviceIndex(touch_device_index,
+    wire_index,
+    device_index);
+  return touch_devices_array_[wire_index];
 }
 
 void TouchInterface::setupTouchDevices()
 {
+  size_t touch_device_index;
+  for (size_t wire_index=0; wire_index<wire_interface::constants::WIRE_COUNT_MAX; ++wire_index)
+  {
+    for (size_t device_index=0; device_index<MPR121::DEVICE_COUNT_MAX; ++device_index)
+    {
+      touch_device_index = getTouchDeviceIndex(wire_index,device_index);
+      touch_device_exists_[touch_device_index] = false;
+    }
+  }
   for (size_t wire_index=0; wire_index<getWireCount(); ++wire_index)
   {
     MPR121 & touch_devices = touch_devices_array_[wire_index];
@@ -62,10 +181,29 @@ void TouchInterface::setupTouchDevices()
       constants::fast_mode);
     for (size_t device_index=0; device_index<getDeviceCount(wire_index); ++device_index)
     {
-      size_t touch_devices_index = (wire_index * MPR121::DEVICE_COUNT_MAX) + device_index;
-      touch_devices.addDevice(constants::touch_device_addresses[touch_devices_index]);
+      MPR121::DeviceAddress device_address = getDeviceAddress(wire_index,device_index);
+      touch_devices.addDevice(device_address);
+      touch_device_index = getTouchDeviceIndex(wire_index,device_index);
+      touch_device_exists_[touch_device_index] = true;
     }
-    touch_devices.setupAllDevices();
+  }
+}
+
+void TouchInterface::updateProperties()
+{
+  size_t touch_device_count_limit = getTouchDeviceCountLimit();
+
+  modular_server::Property & physical_channel_count_property = modular_server_.property(constants::physical_channel_count_property_name);
+  physical_channel_count_property.setArrayLengthRange(touch_device_count_limit,touch_device_count_limit);
+
+  size_t touch_device_index;
+  for (size_t wire_index=0; wire_index<wire_interface::constants::WIRE_COUNT_MAX; ++wire_index)
+  {
+    for (size_t device_index=0; device_index<MPR121::DEVICE_COUNT_MAX; ++device_index)
+    {
+      touch_device_index = getTouchDeviceIndex(wire_index,device_index);
+      setPhysicalChannelCountHandler(touch_device_index);
+    }
   }
 }
 
@@ -91,12 +229,14 @@ void TouchInterface::setWireCountHandler()
 {
   WireInterface::setWireCountHandler();
   setupTouchDevices();
+  updateProperties();
 }
 
 void TouchInterface::setDeviceCountHandler(size_t wire_index)
 {
   WireInterface::setDeviceCountHandler(wire_index);
   setupTouchDevices();
+  updateProperties();
 }
 
 void TouchInterface::pollingHandler(int wire_index)
@@ -105,4 +245,29 @@ void TouchInterface::pollingHandler(int wire_index)
 
 void TouchInterface::setPhysicalChannelCountHandler(size_t touch_device_index)
 {
+  if (!touch_device_exists_[touch_device_index])
+  {
+    modular_server::Property & physical_channel_count_property = modular_server_.property(constants::physical_channel_count_property_name);
+    physical_channel_count_property.disableFunctors();
+    physical_channel_count_property.setElementValue(touch_device_index,
+      constants::null_long);
+    physical_channel_count_property.reenableFunctors();
+  }
+}
+
+void TouchInterface::reinitializeHandler()
+{
+  bool reinitialized = reinitialize();
+  modular_server_.response().returnResult(reinitialized);
+}
+
+void TouchInterface::communicatingHandler()
+{
+  modular_server_.response().writeResultKey();
+  modular_server_.response().beginArray();
+  for (size_t touch_device_index=0; touch_device_index<getTouchDeviceCountLimit(); ++touch_device_index)
+  {
+    modular_server_.response().write(communicating(touch_device_index));
+  }
+  modular_server_.response().endArray();
 }

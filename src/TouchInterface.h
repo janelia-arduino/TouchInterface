@@ -29,6 +29,12 @@ public:
   TouchInterface();
   virtual void setup();
 
+  virtual bool reinitialize();
+
+  bool communicating(size_t touch_device_index);
+
+  size_t getTouchDeviceCountLimit();
+
 protected:
   // Handlers
   virtual void setWireCountHandler();
@@ -42,11 +48,24 @@ private:
   modular_server::Callback callbacks_[touch_interface::constants::CALLBACK_COUNT_MAX];
 
   MPR121 touch_devices_array_[wire_interface::constants::WIRE_COUNT_MAX];
+  MPR121 dummy_touch_devices_;
+  bool touch_device_exists_[touch_interface::constants::TOUCH_DEVICE_COUNT_MAX];
 
+  void getWireAndDeviceIndex(size_t touch_device_index,
+    size_t & wire_index,
+    size_t & device_index);
+  size_t getTouchDeviceIndex(size_t wire_index,
+    size_t device_index);
+  MPR121::DeviceAddress getDeviceAddress(size_t wire_index,
+    size_t device_index);
+  MPR121 & getTouchDevices(size_t touch_device_index);
   void setupTouchDevices();
+  void updateProperties();
 
   // Handlers
   void setPhysicalChannelCountHandler(size_t touch_device_index);
+  void reinitializeHandler();
+  void communicatingHandler();
 
 };
 
