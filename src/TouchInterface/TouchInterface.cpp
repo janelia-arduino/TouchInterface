@@ -158,6 +158,10 @@ bool TouchInterface::reinitialize()
         constants::proximity_mode);
     }
   }
+  if (reinitialized)
+  {
+    setupPolling();
+  }
   return reinitialized;
 }
 

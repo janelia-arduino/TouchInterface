@@ -4,7 +4,7 @@
 
 * Library Information
   - Name :: TouchInterface
-  - Version :: 1.0.0
+  - Version :: 1.0.1
   - License :: BSD
   - URL :: https://github.com/janelia-arduino/TouchInterface
   - Author :: Peter Polidoro
@@ -17,6 +17,26 @@
 * API NAMES
 
   #+BEGIN_SRC js
+    {
+      "id": "getApi",
+      "result": {
+        "firmware": [
+          "TouchInterface"
+        ],
+        "verbosity": "NAMES",
+        "functions": [
+          "reinitialize",
+          "communicating"
+        ],
+        "properties": [
+          "physicalChannelCount",
+          "touchThreshold",
+          "releaseThreshold",
+          "touchDebounce",
+          "releaseDebounce"
+        ]
+      }
+    }
   #+END_SRC
 
 * API GENERAL
