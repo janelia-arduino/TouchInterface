@@ -36,6 +36,9 @@ public:
   size_t getTouchDeviceCountLimit();
 
 protected:
+
+  void updateTouchStatus(size_t wire_index);
+
   // Handlers
   virtual void setWireCountHandler();
   virtual void setDeviceCountHandler(size_t wire_index);
@@ -51,6 +54,9 @@ private:
   MPR121 dummy_touch_devices_;
   bool touch_device_exists_[touch_interface::constants::TOUCH_DEVICE_COUNT_MAX];
 
+  uint16_t touch_status_prev_[touch_interface::constants::TOUCH_DEVICE_COUNT_MAX];
+  uint16_t touch_status_[touch_interface::constants::TOUCH_DEVICE_COUNT_MAX];
+
   void getWireAndDeviceIndex(size_t touch_device_index,
     size_t & wire_index,
     size_t & device_index);
@@ -64,6 +70,10 @@ private:
 
   // Handlers
   void setPhysicalChannelCountHandler(size_t touch_device_index);
+  void setTouchThresholdHandler(size_t touch_device_index);
+  void setReleaseThresholdHandler(size_t touch_device_index);
+  void setTouchDebounceHandler(size_t touch_device_index);
+  void setReleaseDebounceHandler(size_t touch_device_index);
   void reinitializeHandler();
   void communicatingHandler();
 

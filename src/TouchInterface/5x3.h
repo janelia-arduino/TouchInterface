@@ -26,7 +26,19 @@ extern const MPR121::DeviceAddress touch_device_addresses[TOUCH_DEVICE_COUNT_MAX
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern const bool polling_enabled_default[wire_interface::constants::WIRE_COUNT_MAX];
+
+extern const long polling_period_default[wire_interface::constants::WIRE_COUNT_MAX];
+
 extern const long physical_channel_count_default[TOUCH_DEVICE_COUNT_MAX];
+
+extern const long touch_threshold_default[TOUCH_DEVICE_COUNT_MAX];
+
+extern const long release_threshold_default[TOUCH_DEVICE_COUNT_MAX];
+
+extern const long touch_debounce_default[TOUCH_DEVICE_COUNT_MAX];
+
+extern const long release_debounce_default[TOUCH_DEVICE_COUNT_MAX];
 
 // Parameters
 

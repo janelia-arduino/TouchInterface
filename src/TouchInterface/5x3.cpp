@@ -31,6 +31,18 @@ const MPR121::DeviceAddress touch_device_addresses[TOUCH_DEVICE_COUNT_MAX] =
 // Units
 
 // Properties
+const bool polling_enabled_default[wire_interface::constants::WIRE_COUNT_MAX] =
+{
+  polling_enabled_element_default,
+  polling_enabled_element_default,
+};
+
+const long polling_period_default[wire_interface::constants::WIRE_COUNT_MAX] =
+{
+  polling_period_element_default,
+  polling_period_element_default,
+};
+
 const long physical_channel_count_default[TOUCH_DEVICE_COUNT_MAX] =
 {
   physical_channel_count_element_default,
@@ -41,6 +53,54 @@ const long physical_channel_count_default[TOUCH_DEVICE_COUNT_MAX] =
   physical_channel_count_element_default,
   physical_channel_count_element_default,
   physical_channel_count_element_default,
+};
+
+const long touch_threshold_default[TOUCH_DEVICE_COUNT_MAX] =
+{
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+  touch_threshold_element_default,
+};
+
+const long release_threshold_default[TOUCH_DEVICE_COUNT_MAX] =
+{
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+  release_threshold_element_default,
+};
+
+const long touch_debounce_default[TOUCH_DEVICE_COUNT_MAX] =
+{
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+  touch_debounce_element_default,
+};
+
+const long release_debounce_default[TOUCH_DEVICE_COUNT_MAX] =
+{
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
+  release_debounce_element_default,
 };
 
 // Parameters

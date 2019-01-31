@@ -30,11 +30,6 @@ const long null_long = 0;
 
 const MPR121::ProximityMode proximity_mode = MPR121::DISABLED;
 
-const uint8_t touch_threshold = 40;
-const uint8_t release_threshold = 20;
-const uint8_t touch_debounce = 1;
-const uint8_t release_debounce = 1;
-
 const MPR121::BaselineTracking baseline_tracking = MPR121::BASELINE_TRACKING_INIT_10BIT;
 const uint8_t charge_discharge_current = 63;
 const MPR121::ChargeDischargeTime charge_discharge_time = MPR121::CHARGE_DISCHARGE_TIME_HALF_US;
@@ -47,10 +42,34 @@ const MPR121::SamplePeriod sample_period = MPR121::SAMPLE_PERIOD_1MS;
 // Units
 
 // Properties
+const bool polling_enabled_element_default = true;
+
+const long polling_period_element_default = 10;
+
 CONSTANT_STRING(physical_channel_count_property_name,"physicalChannelCount");
 const long physical_channel_count_min = 0;
 const long physical_channel_count_max = MPR121::PHYSICAL_CHANNELS_PER_DEVICE;
 const long physical_channel_count_element_default = 1;
+
+CONSTANT_STRING(touch_threshold_property_name,"touchThreshold");
+const long touch_threshold_min = 0;
+const long touch_threshold_max = 255;
+const long touch_threshold_element_default = 40;
+
+CONSTANT_STRING(release_threshold_property_name,"releaseThreshold");
+const long release_threshold_min = 0;
+const long release_threshold_max = 254;
+const long release_threshold_element_default = 20;
+
+CONSTANT_STRING(touch_debounce_property_name,"touchDebounce");
+const long touch_debounce_min = 0;
+const long touch_debounce_max = 7;
+const long touch_debounce_element_default = 1;
+
+CONSTANT_STRING(release_debounce_property_name,"releaseDebounce");
+const long release_debounce_min = 0;
+const long release_debounce_max = 7;
+const long release_debounce_element_default = 1;
 
 // Parameters
 
