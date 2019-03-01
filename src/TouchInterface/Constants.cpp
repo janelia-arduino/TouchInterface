@@ -21,7 +21,7 @@ const modular_server::FirmwareInfo firmware_info =
   .name_ptr=&firmware_name,
   .version_major=1,
   .version_minor=0,
-  .version_patch=1,
+  .version_patch=2,
 };
 
 const bool fast_mode = true;
@@ -31,8 +31,8 @@ const long null_long = 0;
 const MPR121::ProximityMode proximity_mode = MPR121::DISABLED;
 
 const MPR121::BaselineTracking baseline_tracking = MPR121::BASELINE_TRACKING_INIT_10BIT;
-const uint8_t charge_discharge_current = 63;
-const MPR121::ChargeDischargeTime charge_discharge_time = MPR121::CHARGE_DISCHARGE_TIME_HALF_US;
+const uint8_t charge_discharge_current = 4;
+const MPR121::ChargeDischargeTime charge_discharge_time = MPR121::CHARGE_DISCHARGE_TIME_4US;
 const MPR121::FirstFilterIterations first_filter_iterations = MPR121::FIRST_FILTER_ITERATIONS_34;
 const MPR121::SecondFilterIterations second_filter_iterations = MPR121::SECOND_FILTER_ITERATIONS_10;
 const MPR121::SamplePeriod sample_period = MPR121::SAMPLE_PERIOD_1MS;
@@ -44,7 +44,7 @@ const MPR121::SamplePeriod sample_period = MPR121::SAMPLE_PERIOD_1MS;
 // Properties
 const bool polling_enabled_element_default = true;
 
-const long polling_period_element_default = 10;
+const long polling_period_element_default = 4;
 
 CONSTANT_STRING(physical_channel_count_property_name,"physicalChannelCount");
 const long physical_channel_count_min = 0;
