@@ -3,7 +3,7 @@
 //
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef TOUCH_INTERFACE_CONSTANTS_H
 #define TOUCH_INTERFACE_CONSTANTS_H
